@@ -31,6 +31,12 @@ jobs:
       - name: Build project
         run: npm run build
       
+      - name: Backup build files
+        run: |
+          mkdir -p /tmp/build-backup
+          cp -r dist /tmp/build-backup/
+          rm -rf dist
+
       - name: Configure Git
         run: |
           git config --global user.name 'github-actions[bot]'
@@ -43,7 +49,7 @@ jobs:
       
       - name: Copy build files
         run: |
-          git checkout develop -- dist
+          cp -r /tmp/build-backup/dist ./
           git add dist -f
       
       - name: Commit and push to main
